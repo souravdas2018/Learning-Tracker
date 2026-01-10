@@ -7,6 +7,7 @@ app.get("/", (req, res) => {
   res.send("Learning Tracker Backend is running");
 });
 
+app.use("/admin", require("./routes/admin.routes"));
 app.use("/auth", require("./routes/auth.routes"));
 app.use("/courses", require("./routes/course.routes"));
 app.use("/dashboard", require("./routes/dashboard.routes"));

@@ -1,18 +1,47 @@
 const bcrypt = require("bcrypt");
-const repo = require("../repositories/auth.repo");
-const { generateToken } = require("../utils/jwt");
+const authRepo = require("../repositories/auth.repo");
+const { generateUserToken } = require("../utils/jwt");
 
-exports.signup = async (email, password) => {
-  const hashed = await bcrypt.hash(password, 10);
-  await repo.createUser(email, hashed);
+exports.signup = async (data) => {
+  const { first_name, last_name, phone, email, password } = data;
+
+  const { data: existingUser } = await authRepo.findUserByEmail(email);
+  if (existingUser) throw new Error("User already exists");
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const { data: newUser, error } = await authRepo.createUser({
+    first_name,
+    last_name,
+    phone,
+    email,
+    password: hashedPassword
+  });
+
+  if (error) throw new Error(error.message);
+
+  return newUser; // ✅ now safe
 };
+
+
 
 exports.login = async (email, password) => {
-  const { data } = await repo.findUserByEmail(email);
-  if (!data) throw new Error("User not found");
+  const { data: user } = await authRepo.findUserByEmail(email);
+  if (!user) throw new Error("User not found");
 
-  const valid = await bcrypt.compare(password, data.password);
-  if (!valid) throw new Error("Invalid password");
+  if (user.is_active) {
+    throw new Error("User already logged in");
+  }
 
-  return generateToken(data.id);
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) throw new Error("Invalid credentials");
+
+  // mark user active + save login time
+  await authRepo.activateUser(user.id);
+
+  const token = generateUserToken(user);
+
+  return { token, user };
 };
+
+
