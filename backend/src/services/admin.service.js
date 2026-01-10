@@ -46,9 +46,6 @@ exports.login = async (email, password) => {
   return { token, admin };
 };
 
-
-/* ... existing signup & login functions ... */
-
 // 🔹 Logout function
 exports.logout = async (adminId) => {
   // Option 1: If you store active sessions/tokens in DB, you can remove/invalidate them here
