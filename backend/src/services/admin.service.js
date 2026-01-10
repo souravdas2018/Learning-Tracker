@@ -45,3 +45,18 @@ exports.login = async (email, password) => {
 
   return { token, admin };
 };
+
+
+/* ... existing signup & login functions ... */
+
+// 🔹 Logout function
+exports.logout = async (adminId) => {
+  // Option 1: If you store active sessions/tokens in DB, you can remove/invalidate them here
+  // For example:
+  // await adminRepo.invalidateToken(adminId);
+
+  // Option 2: If no session storage, just log the action
+  console.log(`Admin with ID ${adminId} has logged out`);
+
+  return true;
+};

@@ -20,6 +20,6 @@ router.post("/adminlogout", adminMiddleware, adminController.logout);
  * Existing admin gives admin access to another user
  * Protected route
  */
-router.post("/giveadminaccess", adminController.giveAdminAccess);
+router.post("/giveadminaccess", adminMiddleware, adminController.giveAdminAccess);
 
 module.exports = router;

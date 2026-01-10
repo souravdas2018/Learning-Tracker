@@ -2,16 +2,21 @@ const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    // Accept either "Bearer <token>" or just "<token>"
+    let token = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!token) {
       return res.status(401).json({ error: "Token missing or invalid" });
     }
 
-    const token = authHeader.split(" ")[1];
+    // Remove "Bearer " prefix if present
+    if (token.startsWith("Bearer ")) {
+      token = token.slice(7, token.length);
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // attach user info to request
+    // Attach user info to request
     req.user = {
       id: decoded.id,
       email: decoded.email,
@@ -23,4 +28,5 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 };
+
 
