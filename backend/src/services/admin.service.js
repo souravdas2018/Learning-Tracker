@@ -60,3 +60,11 @@ exports.logout = async (adminId) => {
 
   return true;
 };
+
+// Fetch all admins with access = false
+exports.getPendingAdmins = async () => {
+  const { data, error } = await adminRepo.findPendingAdmins();
+  if (error) throw new Error(error.message);
+
+  return data;
+};

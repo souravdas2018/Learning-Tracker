@@ -9,10 +9,10 @@ router.get("/", (req, res) => {
 });
 
 
-// Admin Auth
+// Admin signup
 router.post("/adminsignup", adminController.signup);
+// Admin login
 router.post("/adminlogin", adminController.login);
-
 // Admin logout → MUST be logged in
 router.post("/adminlogout", adminMiddleware, adminController.logout);
 
@@ -21,5 +21,8 @@ router.post("/adminlogout", adminMiddleware, adminController.logout);
  * Protected route
  */
 router.post("/giveadminaccess", adminMiddleware, adminController.giveAdminAccess);
+
+// Route to get all admins with access = false
+router.get("/pendingadmins", adminMiddleware, adminController.getPendingAdmins);
 
 module.exports = router;
