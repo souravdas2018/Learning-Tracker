@@ -24,10 +24,39 @@ exports.createModule = async (data) => {
   return supabase.from("modules").insert(data).select().single();
 };
 
-exports.updateModuleProgress = async (data) => {
-  return supabase
+exports.getModuleProgress = async (userId, moduleId) => {
+  const { data, error } = await supabase
     .from("user_module_progress")
-    .upsert({ ...data, updated_at: new Date() });
+    .select("*")
+    .eq("user_id", userId)
+    .eq("module_id", moduleId)
+    .maybeSingle(); // Use maybeSingle instead of single to avoid error when not found
+
+  if (error) {
+    throw error;
+  }
+  
+  return data || null;
+};
+
+exports.updateModuleProgress = async (data) => {
+  // Upsert the record and return the updated/inserted data
+  const result = await supabase
+    .from("user_module_progress")
+    .upsert({ ...data, updated_at: new Date() }, { 
+      onConflict: 'user_id,module_id'
+    })
+    .select();
+  
+  // If successful and data exists, return the first record (should be only one)
+  if (result.data && result.data.length > 0) {
+    return {
+      ...result,
+      data: result.data[0]
+    };
+  }
+  
+  return result;
 };
 
 exports.getAllCoursesWithModules = async () => {

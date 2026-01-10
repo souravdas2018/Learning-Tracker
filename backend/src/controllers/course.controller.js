@@ -47,12 +47,23 @@ exports.createModule = async (req, res) => {
 };
 
 exports.updateModuleProgress = async (req, res) => {
-  await courseService.updateModuleProgress(
-    req.user.id,
-    req.params.moduleId,
-    req.body
-  );
-  res.json({ message: "Progress updated" });
+  try {
+    const result = await courseService.updateModuleProgress(
+      req.user.id,
+      req.params.moduleId
+    );
+
+    if (result.error) {
+      return res.status(400).json({ error: result.error.message });
+    }
+
+    res.json({ 
+      message: "Progress updated successfully",
+      data: result.data 
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.getAllCourses = async (req, res) => {
