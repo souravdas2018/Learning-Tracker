@@ -31,7 +31,6 @@ exports.updateAdminAccessByEmail = async (email, access) => {
     .eq("email", email);
 };
 
-// Get all admins with access = false
 exports.findPendingAdmins = async () => {
   return supabase
     .from("admin")
