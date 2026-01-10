@@ -75,12 +75,17 @@ exports.giveAdminAccess = async (req, res) => {
 
 exports.getPendingAdmins = async (req, res) => {
   try {
-    const admins = await adminService.getPendingAdmins();
+    let admins = await adminService.getPendingAdmins();
+
+    // Remove password field before sending
+    admins = admins.map(({ password, ...rest }) => rest);
+
     res.json({ admins });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
+
 
 
 
