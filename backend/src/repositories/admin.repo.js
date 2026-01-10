@@ -30,4 +30,3 @@ exports.updateAdminAccessByEmail = async (email, access) => {
     .update({ access })
     .eq("email", email);
 };
-

@@ -25,7 +25,7 @@ exports.signup = async (data) => {
 };
 
 exports.login = async (email, password) => {
-  const { data: admin, error } = await adminRepo.findAdminByEmail(email);
+  const { data: admin, error } = await adminRepo.findByEmail(email);
 
   if (!admin) {
     throw new Error("Admin not found");

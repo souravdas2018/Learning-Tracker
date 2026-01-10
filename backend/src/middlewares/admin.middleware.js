@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const { data: admin } = await adminRepo.findAdminById(decoded.id);
+    const { data: admin } = await adminRepo.findById(decoded.id);
 
     if (!admin) {
       return res.status(401).json({ error: "Admin not found" });

@@ -14,7 +14,7 @@ router.post("/adminsignup", adminController.signup);
 router.post("/adminlogin", adminController.login);
 
 // Admin logout → MUST be logged in
-router.post("/adminlogout", adminController.logout);
+router.post("/adminlogout", adminMiddleware, adminController.logout);
 
 /**
  * Existing admin gives admin access to another user
