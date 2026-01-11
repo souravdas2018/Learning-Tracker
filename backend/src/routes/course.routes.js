@@ -6,6 +6,7 @@ const adminMiddleware = require("../middlewares/admin.middleware");
 const authMiddleware = require("../middlewares/auth.middleware");
 const userCourseController = require("../controllers/userCourse.controller");
 
+
 // USER
 router.get("/", authMiddleware, courseController.getAllCourses);  // ==> Get All Courses (USER)
 router.get("/:courseId/modules", authMiddleware, courseController.getModulesByCourse);  // ==> Get All Modules Of a Course (User)

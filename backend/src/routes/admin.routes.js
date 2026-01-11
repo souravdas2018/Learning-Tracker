@@ -5,7 +5,6 @@ const adminController = require("../controllers/admin.controller");
 const adminMiddleware = require("../middlewares/admin.middleware");
 
 
-
 router.post("/adminsignup", adminController.signup);  // ==>  Admin Sign-up
 router.post("/adminlogin", adminController.login);  // ==>  Admin Login
 router.post("/adminlogout", adminMiddleware, adminController.logout);// ==> Admin Logout
