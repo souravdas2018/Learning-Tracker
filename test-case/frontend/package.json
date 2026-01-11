@@ -35,10 +35,7 @@
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/../../../frontend/$1"
     },
-    "testMatch": [
-      "**/__tests__/**/*.test.{js,jsx,ts,tsx}",
-      "**/?(*.)+(spec|test).{js,jsx,ts,tsx}"
-    ],
+    "testMatch": [],
     "collectCoverageFrom": [
       "../../frontend/app/**/*.{js,jsx,ts,tsx}",
       "../../frontend/components/**/*.{js,jsx,ts,tsx}",

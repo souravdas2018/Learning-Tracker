@@ -16,8 +16,33 @@ exports.getAllCourses = async () => {
   return courseRepo.getAllCourses();
 };
 
-exports.getModulesByCourse = async (courseId) => {
-  return courseRepo.getModulesByCourse(courseId);
+exports.getModulesByCourse = async (courseId, userId = null) => {
+  // Fetch modules for the course
+  const modulesResult = await courseRepo.getModulesByCourse(courseId);
+  const modulesData = modulesResult.data || [];
+
+  // If no userId provided, return modules as-is
+  if (!userId) return modulesData;
+
+  // Fetch user progress for these modules
+  const moduleIds = modulesData.map((m) => m.id);
+  const progressResult = await courseRepo.getUserModuleProgressForModules(userId, moduleIds);
+  const progressData = progressResult.data || [];
+
+  // Map progress by module_id for quick lookup
+  const progressByModule = {};
+  progressData.forEach((p) => {
+    progressByModule[p.module_id] = p;
+  });
+
+  // Merge progress into modules
+  const modulesWithProgress = modulesData.map((m) => ({
+    ...m,
+    progress: progressByModule[m.id]?.progress ?? 0,
+    time_spent: progressByModule[m.id]?.time_spent ?? 0
+  }));
+
+  return modulesWithProgress;
 };
 
 exports.createModule = async (courseId, data, adminId) => {
