@@ -1,0 +1,29 @@
+{
+  "name": "learning-tracker-backend-tests",
+  "version": "1.0.0",
+  "description": "Test cases for Learning Tracker Backend",
+  "scripts": {
+    "test": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "@jest/globals": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "../../backend/src/**/*.js",
+      "!../../backend/src/app.js",
+      "!../../backend/src/server.js"
+    ],
+    "testMatch": [
+      "**/__tests__/**/*.test.js",
+      "**/?(*.)+(spec|test).js"
+    ],
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"]
+  }
+}

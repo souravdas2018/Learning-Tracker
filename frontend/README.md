@@ -1,16 +1,18 @@
 # Learning Tracker Frontend
 
-A modern Next.js frontend for the Learning Tracker application with data visualization dashboards.
+A modern, beautiful Next.js frontend for the Learning Tracker application with data visualization dashboards and an intuitive user interface.
 
 ## Features
 
-- 🔐 User Authentication (Login/Signup)
+- 🔐 User Authentication (Login/Signup) with beautiful UI
 - 📊 User Dashboard with Charts (Progress, Course Status)
 - 🔧 Admin Dashboard with Analytics Charts
-- 📚 Course Management
+- 📚 Course Management with attractive cards
 - 📈 Module Progress Tracking
-- 🎨 Modern UI with Tailwind CSS
-- 📱 Responsive Design
+- 🎨 Modern, Attractive UI with Tailwind CSS
+- 📱 Fully Responsive Design
+- ✨ Smooth Animations and Transitions
+- 🎯 Intuitive User Experience
 
 ## Tech Stack
 

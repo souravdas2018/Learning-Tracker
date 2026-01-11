@@ -1,0 +1,35 @@
+{
+  "name": "learning-tracker-frontend-tests",
+  "version": "1.0.0",
+  "description": "Test cases for Learning Tracker Frontend",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --coverage --maxWorkers=2"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/user-event": "^14.5.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/../../../frontend/$1"
+    },
+    "testMatch": [
+      "**/__tests__/**/*.test.{js,jsx,ts,tsx}",
+      "**/?(*.)+(spec|test).{js,jsx,ts,tsx}"
+    ],
+    "collectCoverageFrom": [
+      "../../frontend/app/**/*.{js,jsx,ts,tsx}",
+      "../../frontend/components/**/*.{js,jsx,ts,tsx}",
+      "../../frontend/contexts/**/*.{js,jsx,ts,tsx}",
+      "!**/*.d.ts",
+      "!**/node_modules/**"
+    ]
+  }
+}
