@@ -109,3 +109,20 @@ exports.initializeModuleProgress = async (userId, modules) => {
 
   return supabase.from("user_module_progress").insert(records);
 };
+
+exports.getEnrollmentCounts = async () => {
+  const { data, error } = await supabase
+    .from("user_courses")
+    .select("course_id");
+
+  if (error) throw error;
+  if (!data) return {};
+
+  const counts = {};
+  data.forEach(enrollment => {
+    const courseId = enrollment.course_id;
+    counts[courseId] = (counts[courseId] || 0) + 1;
+  });
+
+  return counts;
+};

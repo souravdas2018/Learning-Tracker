@@ -117,7 +117,18 @@ exports.updateModuleProgress = async (userId, moduleId) => {
 };
 
 exports.getAllCourses = async () => {
-  return courseRepo.getAllCoursesWithModules();
+  const courses = await courseRepo.getAllCoursesWithModules();
+
+  // Get enrollment counts
+  const enrollmentCounts = await courseRepo.getEnrollmentCounts();
+
+  // Add enrollment count to each course
+  const coursesWithCounts = (courses || []).map(course => ({
+    ...course,
+    enrollmentCount: enrollmentCounts[course.id] || 0
+  }));
+
+  return coursesWithCounts;
 };
 
 

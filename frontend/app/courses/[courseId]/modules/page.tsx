@@ -14,7 +14,7 @@ interface Module {
 }
 
 export default function ModulesPage() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, isAdmin, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const params = useParams();
   const courseId = params.courseId as string;
@@ -74,7 +74,7 @@ export default function ModulesPage() {
   }
 
   return (
-    <Layout>
+    <Layout isAdmin={isAdmin}>
       <div className="px-4 py-6 sm:px-0">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-3xl font-bold text-gray-900">Course Modules</h2>
@@ -104,15 +104,17 @@ export default function ModulesPage() {
                         Created: {new Date(module.created_at).toLocaleDateString()}
                       </p>
                     </div>
-                    <button
-                      onClick={() => handleUpdateProgress(module.id)}
-                      disabled={updatingProgress === module.id}
-                      className="ml-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
-                    >
-                      {updatingProgress === module.id
-                        ? 'Updating...'
-                        : 'Update Progress'}
-                    </button>
+                    {!isAdmin && (
+                      <button
+                        onClick={() => handleUpdateProgress(module.id)}
+                        disabled={updatingProgress === module.id}
+                        className="ml-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+                      >
+                        {updatingProgress === module.id
+                          ? 'Updating...'
+                          : 'Update Progress'}
+                      </button>
+                    )}
                   </div>
                 </li>
               ))

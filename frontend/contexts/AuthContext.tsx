@@ -19,6 +19,7 @@ interface AuthContextType {
   isAdmin: boolean;
   adminLogin: (email: string, password: string) => Promise<void>;
   adminLogout: () => void;
+  adminSignup: (data: SignupData) => Promise<void>;
 }
 
 interface SignupData {
@@ -150,6 +151,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const adminSignup = async (data: SignupData) => {
+    try {
+      const { adminAuthAPI } = await import('@/services/api');
+      await adminAuthAPI.signup(data);
+      toast.success('Admin registration successful! Please wait for approval.');
+    } catch (error: any) {
+      toast.error(error.response?.data?.error || 'Admin registration failed');
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -162,6 +174,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAdmin,
         adminLogin,
         adminLogout,
+        adminSignup,
       }}
     >
       {children}

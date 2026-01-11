@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 
@@ -14,8 +14,17 @@ export default function SignupPage() {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { signup } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const { signup, adminSignup } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const admin = searchParams?.get('admin');
+    if (admin === 'true') {
+      setIsAdmin(true);
+    }
+  }, [searchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -29,7 +38,11 @@ export default function SignupPage() {
     setIsLoading(true);
 
     try {
-      await signup(formData);
+      if (isAdmin) {
+        await adminSignup(formData);
+      } else {
+        await signup(formData);
+      }
       router.push('/login');
     } catch (error) {
       // Error handled by context
@@ -43,7 +56,7 @@ export default function SignupPage() {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
+            {isAdmin ? 'Create Admin Account' : 'Create your account'}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Or{' '}
@@ -54,6 +67,11 @@ export default function SignupPage() {
               sign in to your existing account
             </Link>
           </p>
+          {isAdmin && (
+            <p className="mt-2 text-center text-xs text-amber-600">
+              Note: Admin accounts require approval from an existing admin before you can log in.
+            </p>
+          )}
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">

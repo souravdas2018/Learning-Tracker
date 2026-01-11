@@ -131,4 +131,12 @@ export const adminAuthAPI = {
   },
 };
 
+// Admin APIs
+export const adminAPI = {
+  giveAdminAccess: (email: string) =>
+    api.post('/admin/giveadminaccess', { email }),
+  
+  getPendingAdmins: () => api.get('/admin/pendingadmins'),
+};
+
 export default api;
