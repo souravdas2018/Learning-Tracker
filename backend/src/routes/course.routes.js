@@ -16,8 +16,8 @@ router.put("/modules/:moduleId/progress", authMiddleware, courseController.updat
 
 // ADMIN
 router.post("/admin/create-course", adminMiddleware, courseController.createCourse);  // ==> Create Course (Admin)
-// router.put("/:id", adminMiddleware, courseController.updateCourse);  // ==> Update Course (Admin)
-// router.delete("/:id", adminMiddleware, courseController.deleteCourse); // ==> Delete Course (Admin)
+router.put("/admin/:id", adminMiddleware, courseController.updateCourse);  // ==> Update Course (Admin)
+router.delete("/admin/:id", adminMiddleware, courseController.deleteCourse); // ==> Delete Course (Admin)
 router.post("/admin/:courseId/modules", adminMiddleware, courseController.createModule);  // ==> Create Modules (Admin)
 router.get("/admin/allcourse", adminMiddleware, courseController.getAllCourses);  // ==> Get All Courses (Admin)
 
