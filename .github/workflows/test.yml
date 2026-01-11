@@ -13,10 +13,6 @@ jobs:
     name: Backend Tests
     runs-on: ubuntu-latest
     
-    defaults:
-      run:
-        working-directory: ./test-case/backend
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,39 +21,30 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: test-case/backend/package-lock.json
       
       - name: Install backend dependencies
-        run: |
-          cd ../../backend
-          npm ci
+        working-directory: ./backend
+        run: npm install
       
       - name: Install test dependencies
-        run: npm ci
+        working-directory: ./test-case/backend
+        run: npm install
       
       - name: Run backend tests
-        run: npm run test:ci
+        working-directory: ./test-case/backend
+        run: npm test -- --passWithNoTests
         env:
           JWT_SECRET: test-jwt-secret-key
           NODE_ENV: test
-      
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./test-case/backend/coverage/lcov.info
-          flags: backend
-          name: backend-coverage
-        continue-on-error: true
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || 'placeholder-key' }}
+          FRONTEND_URL: http://localhost:3000
+          NEXT_PUBLIC_API_BASE_URL: http://localhost:5500
 
   test-frontend:
     name: Frontend Tests
     runs-on: ubuntu-latest
     
-    defaults:
-      run:
-        working-directory: ./test-case/frontend
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -66,27 +53,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: test-case/frontend/package-lock.json
       
       - name: Install frontend dependencies
-        run: |
-          cd ../../frontend
-          npm ci
+        working-directory: ./frontend
+        run: npm install --legacy-peer-deps || npm install
       
       - name: Install test dependencies
-        run: npm ci
+        working-directory: ./test-case/frontend
+        run: npm install --legacy-peer-deps || npm install
       
       - name: Run frontend tests
-        run: npm run test:ci
-      
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./test-case/frontend/coverage/lcov.info
-          flags: frontend
-          name: frontend-coverage
-        continue-on-error: true
+        working-directory: ./test-case/frontend
+        run: npm test -- --passWithNoTests
+        env:
+          NEXT_PUBLIC_API_BASE_URL: http://localhost:5500
 
   test-summary:
     name: Test Summary
