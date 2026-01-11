@@ -29,45 +29,5 @@ describe('Layout Component', () => {
     });
   });
 
-  test('should render layout with user email', () => {
-    render(
-      <Layout>
-        <div>Test Content</div>
-      </Layout>
-    );
-
-    expect(screen.getByText('Learning Tracker')).toBeInTheDocument();
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
-    expect(screen.getByText('Test Content')).toBeInTheDocument();
-  });
-
-  test('should render admin badge when isAdmin is true', () => {
-    render(
-      <Layout isAdmin>
-        <div>Admin Content</div>
-      </Layout>
-    );
-
-    expect(screen.getByText('Admin')).toBeInTheDocument();
-  });
-
-  test('should not render admin badge when isAdmin is false', () => {
-    render(
-      <Layout>
-        <div>User Content</div>
-      </Layout>
-    );
-
-    expect(screen.queryByText('Admin')).not.toBeInTheDocument();
-  });
-
-  test('should render logout button', () => {
-    render(
-      <Layout>
-        <div>Content</div>
-      </Layout>
-    );
-
-    expect(screen.getByText('Logout')).toBeInTheDocument();
-  });
+  // Test removed per request — keeping only utils.test.js and course.test.js
 });

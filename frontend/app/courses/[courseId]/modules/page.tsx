@@ -5,12 +5,15 @@ import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { courseAPI } from '@/services/api';
 import Layout from '@/components/Layout';
+import ProgressBar from '@/components/ProgressBar';
 import { toast } from 'react-hot-toast';
 
 interface Module {
   id: string;
   title: string;
   created_at: string;
+  progress?: number;
+  time_spent?: number;
 }
 
 export default function ModulesPage() {
@@ -57,7 +60,8 @@ export default function ModulesPage() {
       setUpdatingProgress(moduleId);
       await courseAPI.updateModuleProgress(moduleId);
       toast.success('Progress updated successfully!');
-      router.push('/dashboard');
+      // Refresh modules so progress reflects immediately
+      await fetchModules();
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Failed to update progress');
     } finally {
@@ -86,7 +90,20 @@ export default function ModulesPage() {
           </button>
         </div>
 
-        <div className="bg-white shadow rounded-lg">
+        <div className="bg-white shadow rounded-lg p-6">
+          {/* Overall course progress */}
+          {modules.length > 0 && (
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-gray-700">Overall Progress</h3>
+                <span className="text-sm font-semibold text-gray-900">
+                  {Math.round((modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)) )}%
+                </span>
+              </div>
+              <ProgressBar value={modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)} />
+            </div>
+          )}
+
           <ul className="divide-y divide-gray-200">
             {modules.length === 0 ? (
               <li className="px-6 py-12 text-center">
@@ -103,6 +120,14 @@ export default function ModulesPage() {
                       <p className="text-sm text-gray-500 mt-1">
                         Created: {new Date(module.created_at).toLocaleDateString()}
                       </p>
+                      {/* Module progress */}
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                          <span>Progress</span>
+                          <span className="font-semibold">{module.progress ?? 0}%</span>
+                        </div>
+                        <ProgressBar value={module.progress ?? 0} height="h-2" showLabel={false} />
+                      </div>
                     </div>
                     {!isAdmin && (
                       <button

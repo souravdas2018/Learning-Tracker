@@ -20,6 +20,18 @@ exports.getModulesByCourse = async (courseId) => {
   return supabase.from("modules").select("*").eq("course_id", courseId);
 };
 
+exports.getUserModuleProgressForModules = async (userId, moduleIds) => {
+  if (!moduleIds || moduleIds.length === 0) return { data: [] };
+
+  const { data, error } = await supabase
+    .from("user_module_progress")
+    .select("*")
+    .eq("user_id", userId)
+    .in("module_id", moduleIds);
+
+  if (error) throw error;
+  return { data };
+};
 exports.createModule = async (data) => {
   return supabase.from("modules").insert(data).select().single();
 };

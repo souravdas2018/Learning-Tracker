@@ -33,8 +33,13 @@ exports.getAllCourses = async (req, res) => {
 };
 
 exports.getModulesByCourse = async (req, res) => {
-  const modules = await courseService.getModulesByCourse(req.params.courseId);
-  res.json(modules);
+  try {
+    const userId = req.user?.id || null;
+    const modules = await courseService.getModulesByCourse(req.params.courseId, userId);
+    res.json(modules);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.createModule = async (req, res) => {
