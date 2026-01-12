@@ -1,3 +1,4 @@
+// Author: Sourav Kumar Das
 const bcrypt = require("bcrypt");
 const authRepo = require("../repositories/auth.repo");
 const { generateUserToken } = require("../utils/jwt");

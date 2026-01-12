@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Config
 
 Purpose: Contains configuration clients and environment-backed setup used across the backend.

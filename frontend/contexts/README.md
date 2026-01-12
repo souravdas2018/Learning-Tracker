@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Contexts
 
 Purpose: React Context providers for application-wide state (auth, theme, etc.).

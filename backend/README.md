@@ -1,3 +1,5 @@
+Author: Sourav Kumar Das
+
 # Learning Tracker Backend
 
 RESTful API backend for the Learning Tracker application built with Node.js and Express.js.

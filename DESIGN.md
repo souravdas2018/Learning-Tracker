@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Learning Tracker - Design Document
 
 This document outlines the architecture, design decisions, and rationale behind the Learning Tracker application.

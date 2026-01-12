@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Repositories
 
 Purpose: Data access layer that communicates with Supabase/Postgres. Keep SQL/DB details here.

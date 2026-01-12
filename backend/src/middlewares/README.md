@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Middlewares
 
 Purpose: Reusable Express middleware functions to handle authentication, authorization, and common request processing.

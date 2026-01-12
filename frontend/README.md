@@ -1,3 +1,6 @@
+# Author: Sourav Kumar Das
+
+# Frontend
 # Learning Tracker Frontend
 
 A modern, beautiful Next.js frontend for the Learning Tracker application with data visualization dashboards and an intuitive user interface.

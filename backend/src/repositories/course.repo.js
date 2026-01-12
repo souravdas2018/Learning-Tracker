@@ -1,3 +1,4 @@
+// Author: Sourav Kumar Das
 const supabase = require("../config/supabase");
 
 exports.createCourse = async (data) => {

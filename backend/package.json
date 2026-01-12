@@ -2,6 +2,7 @@
   "name": "learning-tracker-backend",
   "version": "1.0.0",
   "description": "Backend for Learning Tracker application",
+  "author": "Sourav Kumar Das",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

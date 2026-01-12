@@ -14,6 +14,7 @@ module.exports = (req, res, next) => {
       token = token.slice(7, token.length);
     }
 
+    // Author: Sourav Kumar Das
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach user info to request

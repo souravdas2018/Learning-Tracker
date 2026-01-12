@@ -9,6 +9,9 @@ exports.createCourse = async (req, res) => {
   }
 };
 
+// Author: Sourav Kumar Das
+const courseService = require("../services/course.service");
+
 exports.updateCourse = async (req, res) => {
   try {
     await courseService.updateCourse(req.params.id, req.body);

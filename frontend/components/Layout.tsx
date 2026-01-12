@@ -9,6 +9,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children, isAdmin = false }: LayoutProps) {
+  // Author: Sourav Kumar Das
   const router = useRouter();
   const { logout, adminLogout, user } = useAuth();
 

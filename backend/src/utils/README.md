@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Utils
 
 Purpose: Small helper utilities used across the codebase (token generation, formatting, helpers).

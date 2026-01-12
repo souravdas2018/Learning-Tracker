@@ -1,4 +1,12 @@
+// Author: Sourav Kumar Das
 const jwt = require("jsonwebtoken");
+
+function getSecret() {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not set. Aborting token generation.");
+  }
+  return process.env.JWT_SECRET;
+}
 
 exports.generateUserToken = (user) => {
   return jwt.sign(
@@ -7,7 +15,7 @@ exports.generateUserToken = (user) => {
       email: user.email,
       role: "user"
     },
-    process.env.JWT_SECRET,
+    getSecret(),
     { expiresIn: "1h" }
   );
 };
@@ -19,7 +27,7 @@ exports.generateAdminToken = (admin) => {
       email: admin.email,
       role: "admin"
     },
-    process.env.JWT_SECRET,
+    getSecret(),
     { expiresIn: "1h" }
   );
 };

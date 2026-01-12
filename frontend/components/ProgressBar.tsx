@@ -1,14 +1,15 @@
 "use client";
 
-import React from "react";
+// Author: Sourav Kumar Das
+import React from 'react'
 
-interface ProgressBarProps {
-  value: number;
-  height?: string;
-  showLabel?: boolean;
+export default function ProgressBar({ value }: { value: number }) {
+  return (
+    <div className="w-full bg-gray-200 rounded-full h-2">
+      <div className="bg-primary-600 h-2 rounded-full" style={{ width: `${value}%` }} />
+    </div>
+  )
 }
-
-export default function ProgressBar({ value, height = "h-3", showLabel = false }: ProgressBarProps) {
   const safe = Math.max(0, Math.min(100, Math.round(value || 0)));
 
   return (

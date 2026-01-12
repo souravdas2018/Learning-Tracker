@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Services (API)
 
 Purpose: Centralized API client and service helpers for backend communication.

@@ -1,6 +1,7 @@
-'use client';
+// Author: Sourav Kumar Das
+'use client'
 
-import { useEffect, useState } from 'react';
+import React from 'react'
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { dashboardAPI } from '@/services/api';

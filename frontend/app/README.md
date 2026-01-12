@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # App (Next.js App Router)
 
 Purpose: Contains route-aware React components and pages handled by Next.js App Router.

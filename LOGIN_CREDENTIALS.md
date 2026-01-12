@@ -11,6 +11,7 @@ This file contains sample login credentials for testing the application.
   "email": "liam.smith@example.com",
   "password": "liam1234"
 }
+Author: Sourav Kumar Das
 ```
 
 ### Alternate User Login (commented)

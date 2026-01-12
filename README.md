@@ -1,3 +1,5 @@
+# Author: Sourav Kumar Das
+
 # Learning Tracker
 
 A comprehensive learning management system built with modern web technologies, designed to track user progress, manage courses, and provide analytics dashboards for both users and administrators.

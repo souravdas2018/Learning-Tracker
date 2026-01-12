@@ -1,3 +1,4 @@
+// Author: Sourav Kumar Das
 const bcrypt = require("bcrypt");
 const adminRepo = require("../repositories/admin.repo");
 const { generateAdminToken } = require("../utils/jwt");

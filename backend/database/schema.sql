@@ -1,4 +1,5 @@
 -- Learning Tracker Database Schema
+-- Author: Sourav Kumar Das
 -- PostgreSQL Database Schema for Supabase
 
 -- Admin Table

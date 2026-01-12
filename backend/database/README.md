@@ -2,6 +2,8 @@
 
 This directory contains the database schema definitions for the Learning Tracker application.
 
+## Author: Sourav Kumar Das
+
 ## Schema File
 
 - **schema.sql** - Complete database schema with all table definitions

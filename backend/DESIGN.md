@@ -1,3 +1,5 @@
+Author: Sourav Kumar Das
+
 # Backend Design Document
 
 This document describes the architecture, design decisions, and implementation details of the Learning Tracker backend.
