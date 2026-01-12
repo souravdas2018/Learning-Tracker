@@ -1,16 +1,14 @@
+// Author: Sourav Kumar Das
 const courseService = require("../services/course.service");
 
 exports.createCourse = async (req, res) => {
   try {
-    const course = await courseService.createCourse(req.body, req.admin.id);
+    const course = await courseService.createCourse(req.body, req.admin?.id);
     res.json(course);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
-
-// Author: Sourav Kumar Das
-const courseService = require("../services/course.service");
 
 exports.updateCourse = async (req, res) => {
   try {
@@ -31,8 +29,12 @@ exports.deleteCourse = async (req, res) => {
 };
 
 exports.getAllCourses = async (req, res) => {
-  const courses = await courseService.getAllCourses();
-  res.json(courses);
+  try {
+    const courses = await courseService.getAllCourses();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.getModulesByCourse = async (req, res) => {
@@ -46,12 +48,16 @@ exports.getModulesByCourse = async (req, res) => {
 };
 
 exports.createModule = async (req, res) => {
-  const module = await courseService.createModule(
-    req.params.courseId,
-    req.body,
-    req.admin.id
-  );
-  res.json(module);
+  try {
+    const module = await courseService.createModule(
+      req.params.courseId,
+      req.body,
+      req.admin?.id
+    );
+    res.json(module);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 };
 
 exports.updateModuleProgress = async (req, res) => {
@@ -61,23 +67,14 @@ exports.updateModuleProgress = async (req, res) => {
       req.params.moduleId
     );
 
-    if (result.error) {
+    if (result && result.error) {
       return res.status(400).json({ error: result.error.message });
     }
 
     res.json({ 
       message: "Progress updated successfully",
-      data: result.data 
+      data: result?.data || result
     });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-exports.getAllCourses = async (req, res) => {
-  try {
-    const courses = await courseService.getAllCourses();
-    res.json(courses);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
