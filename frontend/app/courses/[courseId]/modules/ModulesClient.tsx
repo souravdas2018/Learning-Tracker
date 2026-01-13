@@ -90,9 +90,11 @@ export default function ModulesClient({ courseId }: { courseId: string }) {
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium text-gray-700">Overall Progress</h3>
-                <span className="text-sm font-semibold text-gray-900">
-                  {Math.round((modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)) )}%
-                </span>
+                {!isAdmin && (
+                  <span className="text-sm font-semibold text-gray-900">
+                    {Math.round((modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)) )}%
+                  </span>
+                )}
               </div>
               {!isAdmin && (
                 <ProgressBar value={modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)} />
@@ -117,10 +119,12 @@ export default function ModulesClient({ courseId }: { courseId: string }) {
                         Created: {new Date(module.created_at).toLocaleDateString()}
                       </p>
                       <div className="mt-3">
-                        <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
-                          <span>Progress</span>
-                          <span className="font-semibold">{module.progress ?? 0}%</span>
-                        </div>
+                        {!isAdmin && (
+                          <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
+                            <span>Progress</span>
+                            <span className="font-semibold">{module.progress ?? 0}%</span>
+                          </div>
+                        )}
                         {!isAdmin && (
                           <ProgressBar value={module.progress ?? 0} height="h-2" showLabel={false} />
                         )}

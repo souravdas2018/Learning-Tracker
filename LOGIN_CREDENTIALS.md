@@ -33,6 +33,15 @@ Author: Sourav Kumar Das
   "password": "supervisor123"
 }
 ```
+### Alternate Admin Login (commented)
+
+```json
+
+{
+   "email": "alice@example.com",
+   "password": "admin123",
+}
+```
 
 ---
 
