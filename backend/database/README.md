@@ -50,3 +50,9 @@ The schema includes the following tables:
 - Foreign key relationships are set up with appropriate CASCADE options
 - Timestamps use `TIMESTAMP DEFAULT now()` for automatic timestamping
 - The schema uses `CREATE TABLE IF NOT EXISTS` for idempotency
+
+## CI / Local development
+
+Use the database locally with a Postgres container or Supabase project. For local Docker development, you can add a Postgres service to `docker-compose.yml` and point the `SUPABASE_URL`/`SUPABASE_KEY` accordingly.
+
+See root `README.md` and `DEPLOY.md` for production DB hosting recommendations (RDS / Supabase managed instances) and migrations.

@@ -9,5 +9,8 @@ Guidelines:
 - Return Supabase results directly (or normalized) so services can decide how to handle them
 - Handle DB-level errors only if necessary; prefer throwing to let service/controller respond
 
+Testing:
+- Use integration tests with a test database or in-memory DB to verify repository queries.
+
 Key files:
 - `course.repo.js`, `auth.repo.js`, `dashboard.repo.js`, `userCourse.repo.js`

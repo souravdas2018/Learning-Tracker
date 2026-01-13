@@ -9,6 +9,9 @@ Responsibilities:
 - Compose repository operations into higher-level actions
 - Apply business rules (e.g., progress increments, enrollment initialization)
 
+Testing:
+- Services should be unit-tested with mocked repositories. See `test-case/backend` for examples.
+
 Examples:
 - `course.service.js` — merges module data with user progress and computes derived values
 - `auth.service.js` — user creation and token generation

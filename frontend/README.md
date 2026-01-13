@@ -28,14 +28,24 @@ A modern, beautiful Next.js frontend for the Learning Tracker application with d
 
 ## Setup
 
+Recommended: run with Docker Compose from the repository root (builds frontend + backend):
+
+```bash
+# build and run both services locally
+docker-compose up --build
+```
+
+Or run frontend locally without Docker:
+
 1. Install dependencies:
 ```bash
+cd frontend
 npm install
 ```
 
 2. Create `.env.local` file:
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:5500
 ```
 
 3. Run the development server (runs on port 3500):
@@ -45,7 +55,7 @@ npm run dev
 
 4. Open [http://localhost:3500](http://localhost:3500) in your browser
 
-**Note:** The frontend runs on port 3500, while the backend should run on a different port (default: 3000). Make sure `NEXT_PUBLIC_API_BASE_URL` points to your backend server port.
+Note: When using `docker-compose` the backend default URL is `http://localhost:5500` and the compose file maps the ports accordingly.
 
 ## Project Structure
 

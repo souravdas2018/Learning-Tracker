@@ -9,3 +9,5 @@ Key file:
 
 Guidelines:
 - Keep contexts small and testable; prefer hooks (`useAuth`) for consumption.
+
+For runtime and deployment instructions, see the repository `README.md` and `DEPLOY.md`.

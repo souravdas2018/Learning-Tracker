@@ -7,5 +7,8 @@ Purpose: Reusable Express middleware functions to handle authentication, authori
 Examples:
 - `auth.middleware.js` — validates user JWT and attaches `req.user`
 - `admin.middleware.js` — ensures caller has admin privileges
+- `rateLimit.middleware.js` — global rate limiting
+- `validation.middleware.js` — express-validator result handler
 
-Keep middleware focused and side-effect free where possible.
+Guidance:
+- Keep middleware small and composable. Do not perform heavy business logic here; delegate to services.

@@ -1,3 +1,22 @@
+# Test Cases
+
+This folder contains unit and integration tests used by the project.
+
+Run tests (see individual package.json in test folders):
+
+```bash
+cd test-case/frontend
+npm install
+npm test
+
+cd test-case/backend
+npm install
+npm test
+```
+
+The `testing` branch is used to run CI tests in GitHub Actions.
+
+See root `README.md` for CI and deployment notes.
 # Author: Sourav Kumar Das
 
 # Learning Tracker Test Cases
@@ -32,6 +51,16 @@ npm test              # Run tests once
 npm run test:watch    # Run tests in watch mode
 npm run test:ci       # Run tests for CI/CD
 ```
+
+### CI/CD Integration
+
+Tests are automatically run when code is merged to the `testing` branch via GitHub Actions.
+
+The workflow:
+1. Runs backend tests
+2. Runs frontend tests
+3. Generates coverage reports
+4. Fails if any tests fail
 
 ### Test Coverage
 

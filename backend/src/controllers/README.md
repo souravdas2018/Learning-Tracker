@@ -7,6 +7,9 @@ Common pattern:
 - Call corresponding function in `../services/*`
 - Handle success and error responses (status codes + JSON body)
 
+Testing:
+- Controllers are good candidates for integration tests that exercise routing, middleware, and service interactions.
+
 Typical files:
 - `auth.controller.js` — signup/login/logout
 - `course.controller.js` — course/module endpoints and progress update

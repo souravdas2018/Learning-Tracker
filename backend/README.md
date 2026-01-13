@@ -197,7 +197,36 @@ HTTP Status Codes:
 
 ## Development
 
-### Scripts
+### Run locally (recommended - Docker)
+
+Prerequisite: Docker & Docker Compose installed.
+
+```bash
+# start both services (frontend + backend)
+docker-compose up --build
+
+# backend will be available at http://localhost:5500
+# frontend at http://localhost:3500
+```
+
+### Run locally (node)
+
+```bash
+cd backend
+npm install
+cp .env.example .env
+# configure .env
+npm run dev
+```
+
+### Tests
+
+See the `test-case` folder for unit and integration tests. The `testing` branch runs tests in CI.
+
+### CI / CD
+
+This project includes a GitHub Actions workflow `.github/workflows/deploy-production.yml` that can deploy via Docker Compose to an EC2 host. See root `README.md` and `DEPLOY.md` for details.
+
 
 - `npm start` - Start production server
 - `npm run dev` - Start development server with nodemon

@@ -9,3 +9,6 @@ Key file:
 
 Usage:
 - Import `courseAPI` or `authAPI` and call methods like `courseAPI.getModulesByCourse(courseId)`.
+
+Notes:
+- Ensure `NEXT_PUBLIC_API_BASE_URL` is set in your environment when running locally or in containers.

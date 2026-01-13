@@ -106,3 +106,9 @@ Servers that fail health checks are automatically removed from the pool.
 - Set up monitoring and alerting
 - Use proper SSL/TLS certificates
 - Configure backup and disaster recovery
+
+## CI / Deployment
+
+Deployment notes and server provisioning steps are documented in the repository root `DEPLOY.md`.
+
+This project uses GitHub Actions to build and deploy via Docker Compose (see `.github/workflows/deploy-production.yml`). For container-based deployments, ensure Docker and `docker-compose` are available on the target hosts.

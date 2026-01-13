@@ -11,3 +11,6 @@ Examples:
 Guidelines:
 - Keep components small and focused
 - Prefer props over context unless state is truly application-scoped
+
+Testing and storybook:
+- Consider adding small unit tests for pure components and Storybook for visual review.

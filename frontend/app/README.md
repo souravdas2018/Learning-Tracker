@@ -11,3 +11,6 @@ Structure:
 Notes:
 - Keep route UI focused on data fetching and rendering; use `services/api.ts` for network calls.
 - Use `Layout.tsx` from `components` to wrap pages consistently.
+
+Deployment / Static paths:
+- Some dynamic routes require `generateStaticParams()` when using `output: export` in Next config. This project uses runtime server mode for Next so dynamic routes render on the server. See `next.config.js` and `DEPLOY.md` for deploy details.
