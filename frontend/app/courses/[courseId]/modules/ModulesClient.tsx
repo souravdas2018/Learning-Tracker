@@ -94,7 +94,9 @@ export default function ModulesClient({ courseId }: { courseId: string }) {
                   {Math.round((modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)) )}%
                 </span>
               </div>
-              <ProgressBar value={modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)} />
+              {!isAdmin && (
+                <ProgressBar value={modules.reduce((s, m) => s + (m.progress || 0), 0) / (modules.length || 1)} />
+              )}
             </div>
           )}
 
@@ -119,7 +121,9 @@ export default function ModulesClient({ courseId }: { courseId: string }) {
                           <span>Progress</span>
                           <span className="font-semibold">{module.progress ?? 0}%</span>
                         </div>
-                        <ProgressBar value={module.progress ?? 0} height="h-2" showLabel={false} />
+                        {!isAdmin && (
+                          <ProgressBar value={module.progress ?? 0} height="h-2" showLabel={false} />
+                        )}
                       </div>
                     </div>
                     {!isAdmin && (
