@@ -172,6 +172,50 @@ See [infrastructure/README.md](./infrastructure/README.md) for Nginx load balanc
 - Enable logging and monitoring
 - Set up backup and disaster recovery
 
+### CI / CD (GitHub Actions -> EC2)
+
+This repository includes a GitHub Actions workflow at `.github/workflows/deploy-production.yml` that builds the `frontend` and packages both `frontend` and `backend` artifacts, copies them to an AWS EC2 instance over SSH, installs dependencies, and runs/restarts the apps using `pm2`.
+
+Required GitHub repository secrets (Settings → Secrets):
+- `SSH_PRIVATE_KEY` — private key (PEM) for the EC2 user (no passphrase preferred for automation)
+- `SSH_HOST` — EC2 public IP or DNS name
+- `SSH_USER` — SSH user on EC2 (e.g. `ubuntu`, `ec2-user`)
+- `SSH_PORT` — SSH port (usually `22`)
+- `DEPLOY_PATH` — server directory to deploy into (e.g. `/var/www/learning-tracker`)
+
+Server checklist (target EC2):
+- Node.js (v18+ or v20 recommended)
+- `pm2` (workflow installs globally if missing)
+- Sufficient filesystem permissions for the supplied `SSH_USER` to write into `DEPLOY_PATH`
+- (Optional) A reverse proxy (Nginx) and SSL certs pointing to the frontend port
+
+How the workflow works (summary):
+- On push to the `production` branch the workflow runs on `ubuntu-latest`.
+- It builds the Next.js frontend, packages `frontend` and `backend` into tarballs and copies them to `/tmp` on the EC2 host.
+- Over SSH the workflow extracts artifacts into `${DEPLOY_PATH}/frontend` and `${DEPLOY_PATH}/backend`, installs production dependencies, runs a build for Next, and uses `pm2` to start/restart `frontend` and `backend` processes.
+
+Testing tips (from a dev machine):
+```bash
+# Create artifacts locally (simulate the workflow)
+tar -C frontend -czf /tmp/frontend.tar.gz .
+tar -C backend -czf /tmp/backend.tar.gz .
+
+# Copy to server (replace values)
+scp -P 22 /tmp/frontend.tar.gz ubuntu@1.2.3.4:/tmp/frontend.tar.gz
+scp -P 22 /tmp/backend.tar.gz ubuntu@1.2.3.4:/tmp/backend.tar.gz
+
+# SSH and extract on the server
+ssh -p 22 ubuntu@1.2.3.4
+sudo mkdir -p /var/www/learning-tracker/frontend /var/www/learning-tracker/backend
+sudo tar -xzf /tmp/frontend.tar.gz -C /var/www/learning-tracker/frontend
+sudo tar -xzf /tmp/backend.tar.gz -C /var/www/learning-tracker/backend
+```
+
+Alternative deployment patterns:
+- Frontend to S3 + CloudFront for static hosting and better global performance.
+- Backend to ECS / EKS or Elastic Beanstalk for managed containerized deployments.
+
+
 ## 🤝 Contributing
 
 1. Create a feature branch
