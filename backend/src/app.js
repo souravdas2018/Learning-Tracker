@@ -1,22 +1,24 @@
 // Author: Sourav Kumar Das
+
 const express = require("express");
+const cors = require("cors");
+const helmet = require("helmet");
+const { rateLimiter } = require("./middlewares/rateLimit.middleware");
+
 const app = express();
 
-// CORS configuration
-app.use((req, res, next) => {
-  const origin = process.env.FRONTEND_ORIGIN || "http://localhost:3500";
-  res.header("Access-Control-Allow-Origin", origin);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  
-  // Handle preflight requests
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  
-  next();
-});
+// Security headers
+app.use(helmet());
+
+// CORS - allow configured frontend origin
+const corsOptions = {
+  origin: process.env.FRONTEND_ORIGIN || "http://localhost:3500",
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
+// Basic rate-limiting for all requests
+app.use(rateLimiter);
 
 app.use(express.json());
 

@@ -38,11 +38,11 @@ jobs:
           # No build step for backend in this repo; run a quick node version check
           node -v
 
-      - name: Create deploy artifacts
+      - name: Create deploy bundle (docker-compose)
         run: |
           mkdir -p artifacts
-          tar -C frontend -czf artifacts/frontend.tar.gz .
-          tar -C backend -czf artifacts/backend.tar.gz .
+          # include docker-compose and service folders (Dockerfiles should be present)
+          tar -czf artifacts/deploy.tar.gz docker-compose.yml frontend backend
 
       - name: Prepare SSH key
         run: |
@@ -51,16 +51,15 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy artifacts to server
+      - name: Copy bundle to server
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
-          scp -i ~/.ssh/deploy_key -P $SSH_PORT artifacts/frontend.tar.gz $SSH_USER@$SSH_HOST:/tmp/frontend.tar.gz
-          scp -i ~/.ssh/deploy_key -P $SSH_PORT artifacts/backend.tar.gz $SSH_USER@$SSH_HOST:/tmp/backend.tar.gz
+          scp -i ~/.ssh/deploy_key -P $SSH_PORT artifacts/deploy.tar.gz $SSH_USER@$SSH_HOST:/tmp/deploy.tar.gz
 
-      - name: Remote deploy (extract, install, restart with pm2)
+      - name: Remote deploy via Docker Compose
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -68,50 +67,36 @@ jobs:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
           set -e
-          TARGET_FRONTEND="$DEPLOY_PATH/frontend"
-          TARGET_BACKEND="$DEPLOY_PATH/backend"
-
           ssh -i ~/.ssh/deploy_key -p $SSH_PORT $SSH_USER@$SSH_HOST bash -s <<'REMOTE'
           set -e
-          mkdir -p "$TARGET_FRONTEND" "$TARGET_BACKEND"
+          mkdir -p "$DEPLOY_PATH"
+          tar -xzf /tmp/deploy.tar.gz -C "$DEPLOY_PATH"
+          cd "$DEPLOY_PATH"
 
-          # Frontend
-          tar -xzf /tmp/frontend.tar.gz -C "$TARGET_FRONTEND"
-          cd "$TARGET_FRONTEND"
-          # ensure pm2 is available
-          if ! command -v pm2 >/dev/null 2>&1; then
-            npm install -g pm2
-          fi
-          npm ci --production
-          npm run build
-          # start or restart the Next.js app via npm start
-          if pm2 describe frontend >/dev/null 2>&1; then
-            pm2 restart frontend || true
-          else
-            pm2 start npm --name frontend -- start --prefix "$TARGET_FRONTEND"
+          # Ensure Docker and docker-compose are available
+          if ! command -v docker >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ca-certificates curl gnupg lsb-release
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io
           fi
 
-          # Backend
-          tar -xzf /tmp/backend.tar.gz -C "$TARGET_BACKEND"
-          cd "$TARGET_BACKEND"
-          if ! command -v pm2 >/dev/null 2>&1; then
-            npm install -g pm2
-          fi
-          npm ci --production
-          # start or restart backend using npm start
-          if pm2 describe backend >/dev/null 2>&1; then
-            pm2 restart backend || true
-          else
-            pm2 start npm --name backend -- start --prefix "$TARGET_BACKEND"
+          if ! command -v docker-compose >/dev/null 2>&1; then
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
           fi
 
-          # Optional: cleanup
-          rm -f /tmp/frontend.tar.gz /tmp/backend.tar.gz
-          pm2 save
+          # Run docker-compose build and bring up containers
+          sudo docker-compose -f docker-compose.yml up -d --build
+
+          # cleanup
+          rm -f /tmp/deploy.tar.gz
           REMOTE
 
       - name: Post-deploy notice
-        run: echo "Deploy completed to ${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}"
+        run: echo "Docker Compose deploy completed to ${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}"
 
     # required secrets:
     # - SSH_PRIVATE_KEY: contents of the private key that can SSH to the EC2 instance

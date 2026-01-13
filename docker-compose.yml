@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./backend
+    restart: always
+    environment:
+      - PORT=5500
+      - NODE_ENV=production
+      - JWT_SECRET=${JWT_SECRET}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_KEY}
+    ports:
+      - '5500:5500'
+    networks:
+      - lt-network
+
+  frontend:
+    build:
+      context: ./frontend
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:5500
+    ports:
+      - '3500:3500'
+    depends_on:
+      - backend
+    networks:
+      - lt-network
+
+networks:
+  lt-network:
+    driver: bridge
