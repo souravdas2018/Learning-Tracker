@@ -1,5 +1,3 @@
-import ModulesClient from './ModulesClient';
-
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5500';
 
 export async function generateStaticParams() {
@@ -15,6 +13,6 @@ export async function generateStaticParams() {
   }
 }
 
-export default function Page({ params }: { params: { courseId: string } }) {
-  return <ModulesClient courseId={params.courseId} />;
+export default function CoursePage() {
+  return null;
 }
