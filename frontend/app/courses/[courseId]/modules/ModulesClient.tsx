@@ -2,7 +2,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { courseAPI } from '@/services/api';
 import Layout from '@/components/Layout';
@@ -17,11 +17,9 @@ interface Module {
   time_spent?: number;
 }
 
-export default function ModulesPage() {
+export default function ModulesClient({ courseId }: { courseId: string }) {
   const { user, isAdmin, isLoading: authLoading } = useAuth();
   const router = useRouter();
-  const params = useParams();
-  const courseId = params.courseId as string;
   const [modules, setModules] = useState<Module[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingProgress, setUpdatingProgress] = useState<string | null>(null);
@@ -42,10 +40,7 @@ export default function ModulesPage() {
     try {
       setLoading(true);
       const response = await courseAPI.getModulesByCourse(courseId);
-      // Handle Supabase response structure: { data: [...], error: null }
-      // The backend controller returns the Supabase result directly
       const modulesData = response.data?.data || response.data || [];
-      // Ensure it's an array
       setModules(Array.isArray(modulesData) ? modulesData : []);
     } catch (error: any) {
       console.error('Error fetching modules:', error);
@@ -61,7 +56,6 @@ export default function ModulesPage() {
       setUpdatingProgress(moduleId);
       await courseAPI.updateModuleProgress(moduleId);
       toast.success('Progress updated successfully!');
-      // Refresh modules so progress reflects immediately
       await fetchModules();
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Failed to update progress');
@@ -92,7 +86,6 @@ export default function ModulesPage() {
         </div>
 
         <div className="bg-white shadow rounded-lg p-6">
-          {/* Overall course progress */}
           {modules.length > 0 && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
@@ -121,7 +114,6 @@ export default function ModulesPage() {
                       <p className="text-sm text-gray-500 mt-1">
                         Created: {new Date(module.created_at).toLocaleDateString()}
                       </p>
-                      {/* Module progress */}
                       <div className="mt-3">
                         <div className="flex items-center justify-between text-xs text-gray-600 mb-1">
                           <span>Progress</span>

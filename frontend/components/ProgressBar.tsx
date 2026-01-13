@@ -3,13 +3,13 @@
 // Author: Sourav Kumar Das
 import React from 'react'
 
-export default function ProgressBar({ value }: { value: number }) {
-  return (
-    <div className="w-full bg-gray-200 rounded-full h-2">
-      <div className="bg-primary-600 h-2 rounded-full" style={{ width: `${value}%` }} />
-    </div>
-  )
+type Props = {
+  value?: number
+  height?: string
+  showLabel?: boolean
 }
+
+export default function ProgressBar({ value = 0, height = 'h-2', showLabel = false }: Props) {
   const safe = Math.max(0, Math.min(100, Math.round(value || 0)));
 
   return (
@@ -19,9 +19,9 @@ export default function ProgressBar({ value }: { value: number }) {
           className="absolute left-0 top-0 h-full rounded-full"
           style={{
             width: `${safe}%`,
-            background: "linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #7c3aed 100%)",
-            transition: "width 600ms ease",
-            boxShadow: "0 4px 10px rgba(59,130,246,0.12)"
+            background: 'linear-gradient(90deg, #06b6d4 0%, #3b82f6 50%, #7c3aed 100%)',
+            transition: 'width 600ms ease',
+            boxShadow: '0 4px 10px rgba(59,130,246,0.12)'
           }}
         />
         <div
@@ -35,5 +35,5 @@ export default function ProgressBar({ value }: { value: number }) {
         </div>
       )}
     </div>
-  );
+  )
 }
