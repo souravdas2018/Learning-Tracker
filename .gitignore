@@ -15,3 +15,7 @@ yarn-debug.log*
 
 # OS
 .DS_Store
+
+# Personal / private notes
+INTERVIEW_PREP.md
+INTERVIEW_QUESTIONS_DETAILED.md
