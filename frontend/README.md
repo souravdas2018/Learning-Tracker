@@ -16,6 +16,7 @@ A modern, beautiful Next.js frontend for the Learning Tracker application with d
 - 📱 Fully Responsive Design
 - ✨ Smooth Animations and Transitions
 - 🎯 Intuitive User Experience
+- 🤖 AI-powered features throughout (insights, chat, quiz, recommendations, risk analysis, content gap)
 
 ## Tech Stack
 
@@ -90,6 +91,9 @@ All API calls are centralized in `services/api.ts` with automatic token injectio
 - Course status distribution (Pie Chart)
 - Enrolled and completed courses count
 - Last active course information
+- AI coaching insight banner (sessionStorage cached per user)
+- AI course recommendations (up to 3 unenrolled courses)
+- Floating AI chat assistant (fixed position, platform-context-aware)
 
 ### Admin Dashboard
 - User statistics (Active/Inactive)
@@ -98,6 +102,15 @@ All API calls are centralized in `services/api.ts` with automatic token injectio
 - Engagement metrics
 - Most popular course
 - Admin management stats
+- AI platform health summary banner
+- AI engagement risk analysis with risk level badge and action cards
+- AI content gap analysis with priority-coded course topic suggestions
+- Floating AI admin chat assistant (indigo/violet, platform-data-aware)
+
+### Course Modules
+- AI Study Assistant chatbot per module (conversation history preserved)
+- AI Quiz Generator — 5-question MCQ with score ring and answer review
+- AI Course Description Generator (admin manage page)
 
 ### Course Management
 - Browse all available courses
@@ -116,8 +129,8 @@ npm start
 ## Port Configuration
 
 - **Frontend:** Runs on port 3500 (configured in `package.json`)
-- **Backend:** Should run on port 3000 (or configure `NEXT_PUBLIC_API_BASE_URL` accordingly)
+- **Backend:** Runs on port 5500 (configure `NEXT_PUBLIC_API_BASE_URL` accordingly)
 
 ## Environment Variables
 
-- `NEXT_PUBLIC_API_BASE_URL` - Backend API base URL (default: http://localhost:3000)
+- `NEXT_PUBLIC_API_BASE_URL` - Backend API base URL (default: http://localhost:5500)

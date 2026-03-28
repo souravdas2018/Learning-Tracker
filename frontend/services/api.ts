@@ -14,7 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -32,9 +32,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('isAdmin');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('isAdmin');
         window.location.href = '/login';
       }
     }
@@ -105,7 +105,7 @@ export const adminAuthAPI = {
     email: string;
     password: string;
   }) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
     return axios.post(`${API_BASE_URL}/admin/adminsignup`, data, {
       headers: {
         'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export const adminAuthAPI = {
     }),
   
   logout: () => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const token = typeof window !== 'undefined' ? sessionStorage.getItem('token') : null;
     return axios.post(`${API_BASE_URL}/admin/adminlogout`, {}, {
       headers: {
         'Content-Type': 'application/json',
@@ -136,8 +136,47 @@ export const adminAuthAPI = {
 export const adminAPI = {
   giveAdminAccess: (email: string) =>
     api.post('/admin/giveadminaccess', { email }),
-  
+
   getPendingAdmins: () => api.get('/admin/pendingadmins'),
+};
+
+// AI APIs
+export const aiAPI = {
+  // User
+  getInsight: (dashboardData: object) =>
+    api.post('/ai/insights', { dashboardData }),
+
+  askAssistant: (data: {
+    moduleTitle: string;
+    courseTitle: string;
+    question: string;
+    history: { role: string; content: string }[];
+  }) => api.post('/ai/ask', data),
+
+  getQuiz: (moduleTitle: string, courseTitle: string) =>
+    api.post('/ai/quiz', { moduleTitle, courseTitle }),
+
+  getRecommendations: (enrolledTitles: string[], availableCourses: { id: string; title: string }[]) =>
+    api.post('/ai/recommendations', { enrolledTitles, availableCourses }),
+
+  chat: (question: string, history: { role: string; content: string }[], dashboardContext?: object) =>
+    api.post('/ai/chat', { question, history, dashboardContext }),
+
+  // Admin
+  getAdminSummary: (dashboardData: object) =>
+    api.post('/ai/admin-summary', { dashboardData }),
+
+  getAtRiskAnalysis: (dashboardData: object) =>
+    api.post('/ai/at-risk-analysis', { dashboardData }),
+
+  generateCourseDescription: (courseTitle: string) =>
+    api.post('/ai/course-description', { courseTitle }),
+
+  adminChat: (question: string, history: { role: string; content: string }[], dashboardContext?: object) =>
+    api.post('/ai/admin-chat', { question, history, dashboardContext }),
+
+  getContentGapAnalysis: (dashboardData: object) =>
+    api.post('/ai/content-gap', { dashboardData }),
 };
 
 export default api;

@@ -1,6 +1,7 @@
 // Author: Sourav Kumar Das
 const adminService = require("../services/admin.service");
 const adminRepo = require("../repositories/admin.repo");
+const tokenBlacklist = require("../utils/tokenBlacklist");
 
 exports.signup = async (req, res) => {
   try {
@@ -35,6 +36,9 @@ exports.login = async (req, res) => {
 exports.logout = async (req, res) => {
   try {
     const adminId = req.admin.id; // from token
+
+    // Blacklist the token so it can't be reused after logout
+    tokenBlacklist.add(req.token);
 
     await adminService.logout(adminId);
 

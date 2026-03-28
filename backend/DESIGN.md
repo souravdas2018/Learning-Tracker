@@ -120,6 +120,23 @@ exports.login = async (email, password) => {
 };
 ```
 
+#### AI Service Layer (`services/ai.service.js`)
+
+The AI service is a special-purpose service that does not follow the repository pattern — it has no database dependency. Instead it wraps two external AI provider SDKs:
+
+```
+Controller → ai.service.js → callAI()
+                               ├── callGemini()   [primary]
+                               └── callGroq()     [fallback on any error]
+```
+
+**Design Decisions:**
+- **Dual-provider fallback**: Gemini is called first; any exception triggers Groq. This gives resilience without the user seeing errors.
+- **`extractJSON()` helper**: AI responses for structured data (quiz, recommendations, risk analysis) may include markdown code fences. `extractJSON` strips fences before `JSON.parse` to avoid failures.
+- **`maxTokens` parameter**: Each function passes a tailored token limit — small for prose (200–300), larger for JSON or multi-turn chat (600–900).
+- **No database calls**: The service is purely stateless — context is passed in from the controller from data already fetched by the dashboard repository.
+- **Admin vs user middleware**: AI routes use `authMiddleware` for user endpoints and `adminMiddleware` for admin endpoints — the same middleware pattern used throughout the rest of the API.
+
 #### 5. Repository Layer (`repositories/`)
 - **Purpose**: Data access abstraction
 - **Responsibilities**:
@@ -368,6 +385,8 @@ Returns formatted error response
 - `JWT_SECRET` - Secret key for JWT signing
 - `SUPABASE_URL` - Supabase project URL
 - `SUPABASE_KEY` - Supabase anon key
+- `GEMINI_API_KEY` - Google Gemini API key (primary AI provider)
+- `GROQ_API_KEY` - Groq API key (fallback AI provider)
 
 **Development vs Production:**
 - Development: `.env` file (gitignored)

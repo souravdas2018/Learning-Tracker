@@ -4,18 +4,11 @@
 
 :root {
   --foreground-rgb: 15, 23, 42;
-  --background-start-rgb: 241, 245, 249;
-  --background-end-rgb: 255, 255, 255;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      135deg,
-      rgb(240, 249, 255) 0%,
-      rgb(255, 255, 255) 100%
-    );
-  font-smooth: antialiased;
+  background: linear-gradient(135deg, rgb(240, 249, 255) 0%, rgb(255, 255, 255) 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -24,89 +17,139 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  
+
+  /* ── Glass / frosted ───────────────────────────────── */
   .glass-effect {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
   }
-  
+
+  /* ── Gradient text ─────────────────────────────────── */
   .gradient-text {
-    background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
+  /* ── Card hover lift ───────────────────────────────── */
   .card-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
   .card-hover:hover {
     transform: translateY(-4px);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
-  
+
+  /* ── Chart card with coloured top accent ───────────── */
+  .chart-card {
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+  }
+  .chart-card-header {
+    padding: 1.25rem 1.5rem 0.75rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: linear-gradient(to right, rgba(14, 165, 233, 0.04), rgba(99, 102, 241, 0.04));
+  }
+
+  /* ── Form input ────────────────────────────────────── */
+  .form-input {
+    @apply block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl
+           focus:ring-2 focus:ring-primary-500 focus:border-primary-500
+           transition-all placeholder-gray-400 bg-white text-sm;
+  }
+
+  /* ── Primary button ────────────────────────────────── */
+  .btn-primary {
+    @apply w-full flex justify-center items-center gap-2 py-3 px-4
+           text-base font-semibold rounded-xl text-white
+           bg-gradient-to-r from-primary-600 to-indigo-600
+           hover:from-primary-700 hover:to-indigo-700
+           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500
+           disabled:opacity-50 disabled:cursor-not-allowed
+           shadow-medium hover:shadow-large transform hover:-translate-y-0.5
+           transition-all duration-200;
+  }
+
+  /* ── Secondary / outline button ────────────────────── */
+  .btn-secondary {
+    @apply px-4 py-2 text-sm font-medium rounded-lg
+           bg-white border border-gray-200 text-gray-700
+           hover:bg-gray-50 hover:border-gray-300
+           transition-all duration-200;
+  }
+
+  /* ── Nav link ──────────────────────────────────────── */
+  .nav-link {
+    @apply flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg
+           text-gray-600 hover:text-primary-600 hover:bg-primary-50
+           transition-all duration-150;
+  }
+  .nav-link-active {
+    @apply text-primary-600 bg-primary-50;
+  }
+
+  /* ── Badge ─────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  /* ── Stat card ─────────────────────────────────────── */
+  .stat-card {
+    @apply overflow-hidden rounded-2xl shadow-soft border border-gray-100 card-hover;
+  }
+
+  /* ── Animations ────────────────────────────────────── */
   .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
+    animation: fadeIn 0.5s ease-in-out both;
   }
-  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out both;
+  }
+
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
-  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Shimmer skeleton ──────────────────────────────── */
   .shimmer {
-    background: linear-gradient(
-      90deg,
-      #f0f0f0 0%,
-      #f8f8f8 50%,
-      #f0f0f0 100%
-    );
+    background: linear-gradient(90deg, #f0f0f0 0%, #f8f8f8 50%, #f0f0f0 100%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
-  
   @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
   }
-  
+
+  /* ── Floating blobs ────────────────────────────────── */
   .animate-blob {
     animation: blob 7s infinite;
   }
-  
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
-  
-  .animation-delay-4000 {
-    animation-delay: 4s;
-  }
-  
+  .animation-delay-2000 { animation-delay: 2s; }
+  .animation-delay-4000 { animation-delay: 4s; }
+
   @keyframes blob {
-    0% {
-      transform: translate(0px, 0px) scale(1);
-    }
-    33% {
-      transform: translate(30px, -50px) scale(1.1);
-    }
-    66% {
-      transform: translate(-20px, 20px) scale(0.9);
-    }
-    100% {
-      transform: translate(0px, 0px) scale(1);
-    }
+    0%   { transform: translate(0,    0)    scale(1);   }
+    33%  { transform: translate(30px, -50px) scale(1.1); }
+    66%  { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0,    0)    scale(1);   }
+  }
+
+  /* ── Progress ring (SVG) ───────────────────────────── */
+  .progress-ring-circle {
+    transition: stroke-dashoffset 0.6s ease;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
   }
 }

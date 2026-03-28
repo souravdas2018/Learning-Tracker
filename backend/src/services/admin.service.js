@@ -22,7 +22,8 @@ exports.signup = async (data) => {
 
   if (error) throw new Error(error.message);
 
-  return newAdmin;
+  const { password: _, ...safeAdmin } = newAdmin;
+  return safeAdmin;
 };
 
 exports.login = async (email, password) => {
@@ -44,7 +45,8 @@ exports.login = async (email, password) => {
 
   const token = generateAdminToken(admin);
 
-  return { token, admin };
+  const { password: _, ...safeAdmin } = admin;
+  return { token, admin: safeAdmin };
 };
 
 // 🔹 Logout function

@@ -13,3 +13,4 @@ Testing:
 
 Files:
 - `course.routes.js`, `auth.routes.js`, `dashboard.routes.js`, `admin.routes.js`
+- `ai.routes.js` — AI endpoints split by middleware: user routes use `authMiddleware`, admin routes use `adminMiddleware`

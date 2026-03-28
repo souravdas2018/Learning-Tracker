@@ -21,7 +21,8 @@ exports.signup = async (data) => {
 
   if (error) throw new Error(error.message);
 
-  return newUser; // ✅ now safe
+  const { password: _, ...safeUser } = newUser;
+  return safeUser;
 };
 
 
@@ -29,10 +30,6 @@ exports.signup = async (data) => {
 exports.login = async (email, password) => {
   const { data: user } = await authRepo.findUserByEmail(email);
   if (!user) throw new Error("User not found");
-
-  if (user.is_active) {
-    throw new Error("User already logged in");
-  }
 
   const isValid = await bcrypt.compare(password, user.password);
   if (!isValid) throw new Error("Invalid credentials");
@@ -42,7 +39,8 @@ exports.login = async (email, password) => {
 
   const token = generateUserToken(user);
 
-  return { token, user };
+  const { password: _, ...safeUser } = user;
+  return { token, user: safeUser };
 };
 
 

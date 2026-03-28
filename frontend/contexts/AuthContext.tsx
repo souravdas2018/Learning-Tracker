@@ -41,10 +41,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const storedToken = localStorage.getItem('token');
-      const storedUser = localStorage.getItem('user');
-      const storedIsAdmin = localStorage.getItem('isAdmin') === 'true';
-      
+      const storedToken = sessionStorage.getItem('token');
+      const storedUser = sessionStorage.getItem('user');
+      const storedIsAdmin = sessionStorage.getItem('isAdmin') === 'true';
+
       if (storedToken) {
         setToken(storedToken);
         setIsAdmin(storedIsAdmin);
@@ -64,11 +64,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(newToken);
       setUser({ id, email });
       setIsAdmin(false);
-      
+
       if (typeof window !== 'undefined') {
-        localStorage.setItem('token', newToken);
-        localStorage.setItem('user', JSON.stringify({ id, email }));
-        localStorage.setItem('isAdmin', 'false');
+        sessionStorage.setItem('token', newToken);
+        sessionStorage.setItem('user', JSON.stringify({ id, email }));
+        sessionStorage.setItem('isAdmin', 'false');
       }
       
       toast.success('Login successful!');
@@ -100,9 +100,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(null);
       setIsAdmin(false);
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('isAdmin');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('isAdmin');
       }
       toast.success('Logged out successfully');
     }
@@ -117,11 +117,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(newToken);
       setUser({ id, email });
       setIsAdmin(true);
-      
+
       if (typeof window !== 'undefined') {
-        localStorage.setItem('token', newToken);
-        localStorage.setItem('user', JSON.stringify({ id, email }));
-        localStorage.setItem('isAdmin', 'true');
+        sessionStorage.setItem('token', newToken);
+        sessionStorage.setItem('user', JSON.stringify({ id, email }));
+        sessionStorage.setItem('isAdmin', 'true');
       }
       
       toast.success('Admin login successful!');
@@ -144,9 +144,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(null);
       setIsAdmin(false);
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        localStorage.removeItem('isAdmin');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('isAdmin');
       }
       toast.success('Logged out successfully');
     }

@@ -1,6 +1,7 @@
 // Author: Sourav Kumar Das
 const authService = require("../services/auth.service");
 const authRepo = require("../repositories/auth.repo");
+const tokenBlacklist = require("../utils/tokenBlacklist");
 
 exports.signup = async (req, res) => {
   try {
@@ -29,6 +30,9 @@ exports.login = async (req, res) => {
 exports.logout = async (req, res) => {
   try {
     const userId = req.user.id; // extracted from token
+
+    // Blacklist the token so it can't be reused after logout
+    tokenBlacklist.add(req.token);
 
     await authRepo.logoutUser(userId);
 

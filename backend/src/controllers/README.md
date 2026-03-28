@@ -14,5 +14,6 @@ Typical files:
 - `auth.controller.js` — signup/login/logout
 - `course.controller.js` — course/module endpoints and progress update
 - `dashboard.controller.js` — dashboard endpoints
+- `ai.controller.js` — all AI endpoint handlers; delegates entirely to `ai.service.js`. Handlers: `getInsight`, `askAssistant`, `getQuiz`, `getRecommendations`, `generalChat`, `getAdminSummary`, `getAtRiskAnalysis`, `generateCourseDescription`, `adminChat`, `getContentGapAnalysis`
 
 Keep controllers thin; put business rules in services.

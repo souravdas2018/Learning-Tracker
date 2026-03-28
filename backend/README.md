@@ -13,6 +13,7 @@ RESTful API backend for the Learning Tracker application built with Node.js and 
 - 📈 Progress Tracking
 - 👥 User Enrollment Management
 - 🔑 Admin Access Control
+- 🤖 AI Features — learning insights, study assistant, quiz generation, recommendations, course descriptions, risk analysis, content gap analysis, and admin/user chat (Gemini + Groq)
 
 ## Tech Stack
 
@@ -21,6 +22,8 @@ RESTful API backend for the Learning Tracker application built with Node.js and 
 - **PostgreSQL** - Database (via Supabase)
 - **JWT** - Authentication tokens
 - **bcrypt** - Password hashing
+- **Google Gemini API** (`gemini-1.5-flash`) - Primary AI provider
+- **Groq API** (`llama-3.3-70b-versatile`) - Fallback AI provider
 
 ## Prerequisites
 
@@ -47,6 +50,10 @@ RESTful API backend for the Learning Tracker application built with Node.js and 
    JWT_SECRET=your-secret-key-here
    SUPABASE_URL=your-supabase-url
    SUPABASE_KEY=your-supabase-anon-key
+   GEMINI_API_KEY=your-gemini-api-key
+   GEMINI_MODEL=gemini-1.5-flash
+   GROQ_API_KEY=your-groq-api-key
+   GROQ_MODEL=llama-3.3-70b-versatile
    ```
 
 3. **Set up database**
@@ -77,12 +84,14 @@ backend/
 │   │   └── supabase.js       # Supabase client configuration
 │   ├── controllers/          # Request handlers
 │   │   ├── admin.controller.js
+│   │   ├── ai.controller.js   # AI endpoint handlers
 │   │   ├── auth.controller.js
 │   │   ├── course.controller.js
 │   │   ├── dashboard.controller.js
 │   │   └── userCourse.controller.js
 │   ├── services/             # Business logic
 │   │   ├── admin.service.js
+│   │   ├── ai.service.js      # Gemini + Groq AI integration
 │   │   ├── auth.service.js
 │   │   ├── course.service.js
 │   │   ├── dashboard.service.js
@@ -95,6 +104,7 @@ backend/
 │   │   └── userCourse.repo.js
 │   ├── routes/               # API routes
 │   │   ├── admin.routes.js
+│   │   ├── ai.routes.js       # AI endpoints
 │   │   ├── auth.routes.js
 │   │   ├── course.routes.js
 │   │   └── dashboard.routes.js
@@ -145,6 +155,27 @@ backend/
 
 - `GET /dashboard` - User dashboard data (requires auth)
 - `GET /dashboard/admin` - Admin dashboard data (requires admin auth)
+
+### AI (`/ai`)
+
+**User Endpoints (JWT auth):**
+- `POST /ai/insights` - Generate personalised learning insight from dashboard data
+- `POST /ai/ask` - Study assistant Q&A for a specific module/course
+- `POST /ai/quiz` - Generate 5-question multiple-choice quiz for a module
+- `POST /ai/recommendations` - Suggest unenrolled courses based on learning history
+- `POST /ai/chat` - General-purpose learning assistant chat with dashboard context
+
+**Admin Endpoints (admin JWT auth):**
+- `POST /ai/admin-summary` - Executive health summary of the platform
+- `POST /ai/at-risk-analysis` - Engagement risk analysis with actionable recommendations
+- `POST /ai/course-description` - Generate a course description from a title
+- `POST /ai/admin-chat` - Admin-aware conversational assistant with platform context
+- `POST /ai/content-gap` - Identify content gaps and suggest new course topics
+
+**AI Provider Strategy:**
+- Primary: Google Gemini (`gemini-1.5-flash`) — tried first on every call
+- Fallback: Groq (`llama-3.3-70b-versatile`) — used automatically if Gemini fails
+- All AI responses are non-blocking; failures are silently swallowed on the frontend for non-critical features
 
 ## Authentication
 

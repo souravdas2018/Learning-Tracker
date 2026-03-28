@@ -16,6 +16,43 @@ This document outlines the architecture, design decisions, and rationale behind 
 
 ## Architecture Rationale
 
+### AI Integration
+
+#### AI Provider: Google Gemini + Groq (dual-provider fallback)
+
+**Rationale:**
+- **Free Tiers**: Both providers offer generous free tiers (Gemini: 1500 req/day; Groq: rate-limited but free)
+- **Resilience**: Gemini is tried first on every call; any error (quota, API key, network) automatically falls back to Groq with no user-visible interruption
+- **Model Quality**: `gemini-1.5-flash` and `llama-3.3-70b-versatile` both produce high-quality responses suitable for education use cases
+- **No Cost at Scale**: Avoids billing risk during development and early growth phases
+
+**Alternatives Considered:**
+- **Anthropic Claude API**: Requires paid credits — rejected due to billing requirement
+- **OpenAI GPT**: Also requires paid credits — rejected for the same reason
+- **Single provider**: Rejected because any outage or quota exhaustion would silently break all AI features
+
+**AI Caching Strategy:**
+- AI responses are cached in `sessionStorage` on the frontend (keyed per user email for personalised data, or a fixed key for admin-level summaries)
+- Cache persists for the browser session, avoiding repeated API calls on dashboard revisits
+- Cache is not persisted across page refreshes (intentional — data may change)
+
+**AI Feature Map:**
+
+| Feature | Route | Audience | Provider |
+|---|---|---|---|
+| Learning Insight | `POST /ai/insights` | User | Gemini → Groq |
+| Study Assistant | `POST /ai/ask` | User | Gemini → Groq |
+| Quiz Generator | `POST /ai/quiz` | User | Gemini → Groq |
+| Course Recommendations | `POST /ai/recommendations` | User | Gemini → Groq |
+| Dashboard Chat | `POST /ai/chat` | User | Gemini → Groq |
+| Platform Summary | `POST /ai/admin-summary` | Admin | Gemini → Groq |
+| Risk Analysis | `POST /ai/at-risk-analysis` | Admin | Gemini → Groq |
+| Course Description | `POST /ai/course-description` | Admin | Gemini → Groq |
+| Admin Chat | `POST /ai/admin-chat` | Admin | Gemini → Groq |
+| Content Gap Analysis | `POST /ai/content-gap` | Admin | Gemini → Groq |
+
+---
+
 ### Framework Choices
 
 #### Backend: Node.js + Express.js
@@ -577,9 +614,9 @@ Currently using unversioned APIs. For future versions:
    - **Mitigation**: Queue system (Bull, AWS SQS)
 
 6. **Limited Analytics**
-   - Basic dashboard metrics
-   - **Impact**: Limited insights
-   - **Mitigation**: Advanced analytics, data warehouse
+   - Basic dashboard metrics — enhanced with AI-driven insights, risk analysis, and content gap recommendations
+   - **Impact**: Now provides actionable AI interpretation on top of raw metrics
+   - **Remaining gap**: No data warehouse, historical trend analysis, or cohort analytics
 
 7. **No Mobile App**
    - Web-only application

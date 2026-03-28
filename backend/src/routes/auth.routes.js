@@ -11,15 +11,20 @@ const { handleValidation } = require('../middlewares/validation.middleware');
 // Validation rules
 const signupValidation = [
 	body('email').isEmail().withMessage('Valid email required'),
-	body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-	body('first_name').optional().isString(),
-	body('last_name').optional().isString(),
+	body('password')
+		.isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+		.matches(/[A-Z]/).withMessage('Password must contain at least one uppercase letter')
+		.matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter')
+		.matches(/[0-9]/).withMessage('Password must contain at least one number'),
+	body('first_name').notEmpty().withMessage('First name is required').isString().trim(),
+	body('last_name').notEmpty().withMessage('Last name is required').isString().trim(),
+	body('phone').isMobilePhone('any').withMessage('Valid phone number required'),
 	handleValidation,
 ];
 
 const loginValidation = [
 	body('email').isEmail().withMessage('Valid email required'),
-	body('password').exists().withMessage('Password required'),
+	body('password').notEmpty().withMessage('Password required'),
 	handleValidation,
 ];
 

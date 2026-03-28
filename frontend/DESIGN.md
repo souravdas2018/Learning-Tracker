@@ -175,6 +175,8 @@ export const authAPI = { ... };
 export const courseAPI = { ... };
 export const dashboardAPI = { ... };
 export const adminAPI = { ... };
+export const adminAuthAPI = { ... };
+export const aiAPI = { ... };   // All AI features — user and admin
 ```
 
 **Benefits:**
@@ -292,6 +294,39 @@ const fetchData = async () => {
 **Future Considerations:**
 - **React Query/SWR**: Caching, background updates, optimistic updates
 - **Server Components**: Next.js 14 Server Components for data fetching
+
+### AI Feature Architecture
+
+#### Floating Chat Panels (User + Admin)
+
+Both the user dashboard chat and the admin dashboard chat are rendered **outside** the `<Layout>` component using a React fragment (`<>`):
+
+```tsx
+return (
+  <>
+    <Layout>...</Layout>
+    <button className="fixed bottom-6 right-6 ...">  {/* AI chat button */}
+    {chatOpen && <div className="fixed bottom-24 right-6 ...">  {/* panel */}
+  </>
+);
+```
+
+**Rationale:** The `<Layout>` component's `<main>` element applies `animate-fade-in`, which uses `transform: translateY()` in its CSS keyframes. CSS transforms on a parent element create a new stacking context, causing `fixed` positioned children to be positioned relative to the transformed ancestor rather than the viewport. Moving the floating elements outside `<Layout>` avoids this stacking context issue entirely.
+
+#### sessionStorage AI Caching
+
+AI API calls are expensive (latency + quota). Each AI section caches its result in `sessionStorage`:
+- User insight: keyed by user email (`ai_insight_{email}`)
+- Recommendations: fixed key (`ai_recommendations`)
+- Admin summary: fixed key (`admin_ai_summary`)
+- Admin risk analysis: fixed key (`admin_risk_analysis`)
+- Admin content gap: fixed key (`admin_content_gap`)
+
+Cache persists for the browser session. On next visit within the same session, the cached value is shown immediately with no API call. Clearing sessionStorage (or opening a new tab) triggers fresh calls.
+
+#### AI Loading States
+
+Each AI section renders shimmer skeleton loaders while waiting for the API, matching the card dimensions so the layout doesn't shift. This follows the same shimmer pattern used for primary data loading across the dashboard.
 
 ### UI/UX Design Decisions
 
