@@ -148,7 +148,7 @@ exports.getAdminDashboard = async () => {
     enrollmentsByDay[key] = 0;
   }
   recentEnrollmentsRaw.forEach(e => {
-    const d = new Date(e.enrolled_at);
+    const d = new Date(e.created_at);
     const key = d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
     if (Object.prototype.hasOwnProperty.call(enrollmentsByDay, key)) {
       enrollmentsByDay[key]++;

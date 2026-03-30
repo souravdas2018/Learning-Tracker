@@ -375,9 +375,9 @@ exports.getRecentEnrollmentsLast7Days = async () => {
   sevenDaysAgo.setHours(0, 0, 0, 0);
 
   const { data, error } = await supabase
-    .from("user_courses")
-    .select("enrolled_at")
-    .gte("enrolled_at", sevenDaysAgo.toISOString());
+    .from("users")
+    .select("created_at")
+    .gte("created_at", sevenDaysAgo.toISOString());
 
   if (error) throw error;
   return data || [];
